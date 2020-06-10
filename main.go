@@ -117,7 +117,9 @@ func SimpleServer(w http.ResponseWriter, r *http.Request) {
 			tracer := opentracing.GlobalTracer()
 			span := tracer.StartSpan("gateway")
 			log("gateway service1")
-			isPrime(M_PRIME)
+			isPrime(S_PRIME)
+			isPrime(S_PRIME)
+			isPrime(S_PRIME)
 			resp, err := makeHTTPGET(tracer, span.Context(), "GET_SERVICE1", Service1+"/service1", r.Header.Get("debug_id"))
 			if err != nil || resp.StatusCode != 200 {
 				log("ERROR", err)
@@ -125,7 +127,8 @@ func SimpleServer(w http.ResponseWriter, r *http.Request) {
 				span.Finish()
 				return
 			}
-			isPrime(M_PRIME)
+			isPrime(S_PRIME)
+			isPrime(S_PRIME)
 			w.Header().Add("debug_id", r.Header.Get("debug_id"))
 			w.Write([]byte{})
 			span.Finish()
@@ -134,7 +137,9 @@ func SimpleServer(w http.ResponseWriter, r *http.Request) {
 			tracer := opentracing.GlobalTracer()
 			span := tracer.StartSpan("gateway")
 			log("gateway service2")
-			isPrime(M_PRIME)
+			isPrime(S_PRIME)
+			isPrime(S_PRIME)
+			isPrime(S_PRIME)
 			resp, err := makeHTTPGET(tracer, span.Context(), "GET_SERVICE2", Service2+"/service2", r.Header.Get("debug_id"))
 			if err != nil || resp.StatusCode != 200 {
 				log("ERROR", err)
@@ -142,7 +147,8 @@ func SimpleServer(w http.ResponseWriter, r *http.Request) {
 				span.Finish()
 				return
 			}
-			isPrime(M_PRIME)
+			isPrime(S_PRIME)
+			isPrime(S_PRIME)
 			w.Header().Add("debug_id", r.Header.Get("debug_id"))
 			w.Write([]byte{})
 			span.Finish()
@@ -154,10 +160,11 @@ func SimpleServer(w http.ResponseWriter, r *http.Request) {
 			defer serverSpan.Finish()
 			log(Name)
 			if r.URL.Path == "/service2" {
-				isPrime(L_PRIME)
+				isPrime(M_PRIME)
 				isPrime(S_PRIME)
+			} else {
+				isPrime(M_PRIME)
 			}
-			isPrime(L_PRIME)
 			w.Header().Add("debug_id", r.Header.Get("debug_id"))
 			w.Write([]byte{})
 			return
