@@ -50,7 +50,8 @@ func initTracing() {
 			Param: 1,
 		},
 		Reporter: &jaegercfg.ReporterConfig{
-			LogSpans: true,
+			LogSpans:           false,
+			LocalAgentHostPort: "jaeger:6831",
 		},
 	}
 
@@ -152,7 +153,10 @@ func SimpleServer(w http.ResponseWriter, r *http.Request) {
 			serverSpan := tracer.StartSpan("server", ext.RPCServerOption(spanCtx))
 			defer serverSpan.Finish()
 			log(Name)
-			isPrime(L_PRIME)
+			if r.URL.Path == "/service2" {
+				isPrime(L_PRIME)
+				isPrime(S_PRIME)
+			}
 			isPrime(L_PRIME)
 			w.Header().Add("debug_id", r.Header.Get("debug_id"))
 			w.Write([]byte{})

@@ -6,6 +6,8 @@ services:
     build: "."
     image: vahidmostofi/micromock
     restart: on-failure
+    depends_on:
+      - jaeger
     ports:
       - "9080:30080"
     environment:
