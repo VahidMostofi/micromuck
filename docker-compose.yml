@@ -1,0 +1,86 @@
+version: "3"
+
+services:
+  gateway:
+    container_name: mm_gw
+    build: "."
+    image: vahidmostofi/micromock
+    restart: on-failure
+    ports:
+      - "9080:30080"
+    environment:
+      - GOMAXPROCS=1
+      - PORT=30080
+      - NAME=gateway
+      - SERVICE1=http://one:30081
+      - SERVICE2=http://two:30082
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 3G
+        reservations:
+          cpus: "1"
+          memory: 1G
+  ################################################
+  one:
+    container_name: mm_one
+    build: "."
+    image: vahidmostofi/micromock
+    restart: on-failure
+    ports:
+      - "30081:30081"
+    depends_on:
+      - gateway
+    environment:
+      - GOMAXPROCS=1
+      - PORT=30081
+      - NAME=service_one
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 3G
+        reservations:
+          cpus: "1"
+          memory: 1G
+  ################################################
+  two:
+    container_name: mm_two
+    build: "."
+    image: vahidmostofi/micromock
+    restart: on-failure
+    ports:
+      - "30082:30082"
+    depends_on:
+      - gateway
+    environment:
+      - GOMAXPROCS=1
+      - PORT=30082
+      - NAME=service_two
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 3G
+        reservations:
+          cpus: "1"
+          memory: 1G
+  ################################################
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 8G
+        reservations:
+          cpus: "1"
+          memory: 6G
